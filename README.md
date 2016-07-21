@@ -5,4 +5,3 @@ Goals:
 - uses background images
 - vanilla javascript
 - degrades gracefully in older browsers
-- simple
