@@ -1,2 +1,7 @@
 # bg-slide
-Background Slideshow
+
+Goals:
+- semantic
+- uses background images
+- vanilla javascript
+- degrades gracefully in older browsers
