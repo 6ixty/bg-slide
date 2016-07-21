@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Background</title>
+<style>
+*, html, body {
+	padding: 0;
+	margin: 0;
+	font-family: sans-serif;
+}
+html, body, #bg {
+	height: 100%;
+	width: 100%;
+}
+#loader, #bg, #bg .panel {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#loader {
+	height: 100vh;
+	width: 100vw;
+	background: #000;
+	z-index: 3;
+}
+#loader.loaded {
+	opacity: 0;
+	top: -100vh;
+	transition: opacity 1s ease-out, top 0s 1s ease-out;
+}
+#bg {
+	z-index: 1;
+	background: url(1.png);
+	background-size: cover;
+	background-position: center center;
+}
+#bg .panel {
+	height: 100vh;
+	width: 100vw;
+	line-height: 100vh;
+	color: #f00;
+	text-align: center;
+	background-size: cover;
+	background-position: center center;
+	opacity: 0;
+}
+#bg .panel.fadeIn {
+	opacity: 1;
+}
+#bg .panel.fadeIn,
+#bg .panel.fadeOut {
+	transition: opacity 1s ease-out;
+}
+#bg .panel.fadeOut,
+#bg .panel.hide {
+	opacity: 0;
+}
+#bg .panel.hide {
+	transition: opacity 0s ease-out;
+}
+#content {
+	z-index: 2;
+	position: absolute;
+}
+</style>
+</head>
+
+<body>
+<div id="loader"></div>
+<div id="bg">
+    <div class="panel" data-src="2.png"></div>
+    <div class="panel" data-src="3.png"></div>
+</div>
+<div id="content">
+	<h1>after</h1>
+</div>
+<script>
+window.onload = function () {
+	var delay = 5000;	
+	var panels = document.getElementById('bg').getElementsByClassName('panel');
+	var index = 0;
+	
+	document.getElementById('loader').className = 'loaded';
+	setTimeout(preload, delay);
+	
+	function preload(){
+		if(panels && panels.length > index){
+			var img = new Image();
+			img.onload = function(){
+				console.log(index + ':' + this.src);
+				panels[index].style.backgroundImage = 'url(' + this.src + ')';
+				cycle();
+				setTimeout(preload, delay);	
+			}
+			img.src = panels[index].getAttribute('data-src');
+		} else {
+			setInterval(cycle, delay)
+		}
+	}	
+	
+	function cycle(){		
+		if(index == panels.length){
+			for(n = 0; n < panels.length; n++){
+				panels[n].className = 'panel hide';
+			}
+			panels[index-1].className = 'panel fadeOut';
+			index = 0;
+		} else {
+			panels[index].className = 'panel fadeIn';
+			index++;
+		}
+	}
+}
+</script>
+<noscript>
+<style>
+#loader,
+#bg .panel {
+	display: none;
+}
+</style>
+</noscript>
+</body>
+</html>
